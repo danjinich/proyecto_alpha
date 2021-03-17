@@ -5,8 +5,6 @@
  */
 package Servidor;
 
-
-
 //Objeto jugaddor de java.
 
 public class Jugador {
@@ -30,9 +28,9 @@ public class Jugador {
 
     @Override
     public String toString() {
-        return  id + ": " + puntos + "\n";
+        return id + ": " + puntos + "\n";
     }
-    //GGetters setterrss
+    // GGetters setterrss
 
     public boolean isAcabo() {
         return acabo;
@@ -41,7 +39,7 @@ public class Jugador {
     public void setAcabo(boolean acabo) {
         this.acabo = acabo;
     }
-    
+
     public boolean isListo() {
         return listo;
     }
@@ -52,9 +50,9 @@ public class Jugador {
 
     @Override
     public boolean equals(Object o) {
-        return o.getClass() == this.getClass() && ((Jugador)o).getId().equals(this.id);
+        return o.getClass() == this.getClass() && ((Jugador) o).getId().equals(this.id);
     }
-    
+
     public String getId() {
         return id;
     }
@@ -75,9 +73,9 @@ public class Jugador {
         this.puntos = this.puntos + 1;
         return this.puntos;
     }
-    
+
     public void resetPuntos() {
         this.puntos = 0;
-    }    
-   
+    }
+
 }

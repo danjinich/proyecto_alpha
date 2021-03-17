@@ -20,8 +20,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-public class ClienteEstresado extends Thread{
+public class ClienteEstresado extends Thread {
     private final String idJuego;
     private int puntos = 0;
     private static final int jugadores = 100;
@@ -33,104 +32,101 @@ public class ClienteEstresado extends Thread{
     }
 
     @Override
-    public void run(){
+    public void run() {
         try {
             Random rand = new Random();
             int aux2;
             byte[] buffer;
             long tiempo = 0;
             int golpes = 0;
-            while(true){
+            while (true) {
                 buffer = new byte[1000];
                 new DatagramPacket(buffer, buffer.length);
-                if(golpes == 5){
+                if (golpes == 5) {
                     float promedio = tiempo / golpes;
-                    //System.out.println(promedio);
-                    myWriter.write(promedio +",\n");//Escribimos el res
-                    doneSignal.countDown();//Le bajamos al contador
-                    break;  
-                }else{
-                   aux2 = rand.nextInt(3);
-                    //System.out.println(aux2);
-                    if(aux2 == 0){
+                    // System.out.println(promedio);
+                    myWriter.write(promedio + ",\n");// Escribimos el res
+                    doneSignal.countDown();// Le bajamos al contador
+                    break;
+                } else {
+                    aux2 = rand.nextInt(3);
+                    // System.out.println(aux2);
+                    if (aux2 == 0) {
                         tiempo = tiempo + this.golpe();
                         golpes++;
-                        //System.out.println(golpes);
+                        // System.out.println(golpes);
                     }
                 }
                 Thread.sleep(10);
-            } 
+            }
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ClienteEstresado.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } 
-    
-      
+    }
 
-    //cuando le pegas a un mounstro este metodo manda un aviso al servidor
-    //usando sockets.
-    public long golpe(){
+    // cuando le pegas a un mounstro este metodo manda un aviso al servidor
+    // usando sockets.
+    public long golpe() {
         Socket s = null;
         long time;
         try {
-            
-            puntos = puntos +1;
+
+            puntos = puntos + 1;
 
             int tcpPort = 7899;
             String tcpIP = "localhost";
             s = new Socket(tcpIP, tcpPort);
-            DataOutputStream out =
-                    new DataOutputStream( s.getOutputStream());
+            DataOutputStream out = new DataOutputStream(s.getOutputStream());
             time = System.currentTimeMillis();
             out.writeUTF(idJuego);
-           
+
             DataInputStream in = new DataInputStream(s.getInputStream());
             in.readUTF();
-           
+
             time = System.currentTimeMillis() - time;
             return time;
-        }catch (IOException ex){
+        } catch (IOException ex) {
             Logger.getLogger(ClienteEstresado.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
-        } 
-        finally {
-            if(s != null) try {
-                s.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ClienteEstresado.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } finally {
+            if (s != null)
+                try {
+                    s.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ClienteEstresado.class.getName()).log(Level.SEVERE, null, ex);
+                }
         }
     }
-    
-    
+
     public static void main(String[] args) {
         try {
             ClienteEstresado c;
             Conex con;
-            System.setProperty("java.security.policy", "file:/home/danjf/IdeaProjects/ProyectoAlpha/src/Cliente/client.policy");
+            System.setProperty("java.security.policy",
+                    "file:/home/danjf/IdeaProjects/ProyectoAlpha/src/Cliente/client.policy");
             if (System.getSecurityManager() == null) {
                 System.setSecurityManager(new SecurityManager());
             }
             String name = "Login";
-            Registry registry = LocateRegistry.getRegistry("localhost");  //Aqui va la IP del servidor
+            Registry registry = LocateRegistry.getRegistry("localhost"); // Aqui va la IP del servidor
             LoginPartida Log = (LoginPartida) registry.lookup(name);
 
-            //Crear un csv con los resultados
-            File myObj = new File("datos_"+jugadores+".csv");
+            // Crear un csv con los resultados
+            File myObj = new File("datos_" + jugadores + ".csv");
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {
                 System.out.println("File already exists.");
             }
-            myWriter = new FileWriter("datos_"+jugadores+".csv");
+            myWriter = new FileWriter("datos_" + jugadores + ".csv");
             myWriter.write("Promedio,\n");
 
-            //Un contador, para asegurarnos que no se cierre el writer
+            // Un contador, para asegurarnos que no se cierre el writer
             doneSignal = new CountDownLatch(jugadores);
 
-            for(int i = 0; i < jugadores ; i++){
-                con = Log.Conect(i+1 + "");
-                c = new ClienteEstresado(i+1 + "" );
+            for (int i = 0; i < jugadores; i++) {
+                con = Log.conexion(i + 1 + "");
+                c = new ClienteEstresado(i + 1 + "");
                 c.start();
             }
 
@@ -142,7 +138,6 @@ public class ClienteEstresado extends Thread{
             e.printStackTrace();
         }
 
-
     }
-    
+
 }

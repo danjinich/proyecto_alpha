@@ -5,7 +5,6 @@
  */
 package Servidor;
 
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,19 +12,18 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 //Conexion TCP, cada conex es un hilo y el escuchador de conexc est[a en
 //un hilo indepenmdiante.
 
-public class TCP extends Thread  {
-    
+public class TCP extends Thread {
+
     Administrador adm;
     Partida pa;
     ServerSocket listenSocket;
-    
+
     public TCP(int serverPort) {
         try {
-            //int serverPort = 7899;
+            // int serverPort = 7899;
             listenSocket = new ServerSocket(serverPort);
         } catch (IOException ex) {
             Logger.getLogger(TCP.class.getName()).log(Level.SEVERE, null, ex);
@@ -35,32 +33,29 @@ public class TCP extends Thread  {
     public void setAdm(Administrador adm) {
         this.adm = adm;
     }
-    
+
     public void setP(Partida pa) {
         this.pa = pa;
     }
 
     @Override
-    public void run(){
+    public void run() {
         try {
-            while(true){
-                Socket clientSocket = listenSocket.accept(); 
-                Puntos p = new Puntos(adm,clientSocket,pa);
+            while (true) {
+                Socket clientSocket = listenSocket.accept();
+                Puntos p = new Puntos(adm, clientSocket, pa);
                 p.start();
             }
-        }
-        catch(EOFException e) {
-            System.out.println("EOF:"+e.getMessage());
-        } 
-        catch(IOException e) {
-            System.out.println("IO:"+e.getMessage());
+        } catch (EOFException e) {
+            System.out.println("EOF:" + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IO:" + e.getMessage());
         } finally {
             try {
                 listenSocket.close();
-            } catch (IOException e){
+            } catch (IOException e) {
                 System.out.println(e);
             }
         }
     }
 }
-

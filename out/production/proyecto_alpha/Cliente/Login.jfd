@@ -1,0 +1,33 @@
+JFDML JFormDesigner: "7.0.3.0.337" Java: "11.0.10" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:42:p, par l {seq {comp btnLogin:::p::p, space ::248:x}, seq {par l {comp jLabel1:::p::p, comp txtID:::::x}, space u:::x, comp av:::p:101:p, space ::64:x}}}}"
+			"$verticalGroup": "par l {seq t {space :p:81:p, comp jLabel1:::p::p, space :::p, comp txtID:::p:30:p, space :p:40:p, comp btnLogin:::p::p, space ::17:x, comp av:::p::p, space :p:56:p}}"
+		} ) {
+			name: "this"
+			"defaultCloseOperation": 3
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnLogin"
+				"text": "Iniciar sesión"
+				addEvent( new FormEvent( "javax.swing.event.AncestorListener", "ancestorAdded", "btnLoginAncestorAdded", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "btnLoginActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "txtID"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "jLabel1"
+				"text": "Ingresa el ID que deseas tener: "
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "av"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 400, 300 )
+			"location": new java.awt.Point( 0, 0 )
+		} )
+	}
+}

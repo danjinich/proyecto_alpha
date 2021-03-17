@@ -7,9 +7,6 @@ package Interfaces;
 
 import java.io.Serializable;
 
-
-
-
 //Clase usada para regresar los datos de conexion al jugador.
 // El jugador recibe un objeto de clase conexion por el RMI
 public class Conex implements Serializable {
@@ -19,8 +16,7 @@ public class Conex implements Serializable {
     String tcpIP;// = "localhost";
     int mulPort;// = 6791;
     String mulIP;// = "228.5.6.7";
-    
-    
+
     public Conex(String idJugador, int puntos, int tcpPort, String tcpIP, int mulPort, String mulIP) {
         this.idJugador = idJugador;
         this.puntos = puntos;
@@ -28,13 +24,13 @@ public class Conex implements Serializable {
         this.tcpIP = tcpIP;
         this.mulPort = mulPort;
         this.mulIP = mulIP;
-        
+
     }
 
     public Conex(String idJugador) {
         this.idJugador = idJugador;
     }
-    
+
     public Conex(String idJugador, int tcpPort, String tcpIP, int mulPort, String mulIP) {
         this.idJugador = idJugador;
         this.puntos = -1;
