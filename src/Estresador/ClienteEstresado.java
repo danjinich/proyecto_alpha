@@ -126,14 +126,14 @@ public class ClienteEstresado extends Thread {
                 }
                 String name = "Login";
                 Registry registry = LocateRegistry.getRegistry("localhost");  //Aqui va la IP del servidor
-                LoginPartida Log = (LoginPartida) registry.lookup(name);
+                LoginPartida partida = (LoginPartida) registry.lookup(name);
 
                 //Crear un csv con los resultados
                 //Un contador, para asegurarnos que no se cierre el writer
                 doneSignal = new CountDownLatch(jugadores);
 
                 for (int i = 0; i < jugadores; i++) {
-                    con = Log.Conect(i + 1 + "");
+                    con = partida.conexion(i + 1 + "");
                     c = new ClienteEstresado(i + 1 + "");
                     c.start();
                 }
