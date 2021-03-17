@@ -5,15 +5,12 @@
  */
 package Servidor;
 
-
 import Interfaces.Conex;
 import Interfaces.LoginPartida;
 import java.util.ArrayList;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
 
 //Intento de objeto paritda de java
 //Guarda a los jugadores que se dan de alta
@@ -23,8 +20,8 @@ import java.util.logging.Logger;
 
 //Es la clase que usa RMI para mandar datos de conexion a los jugadores
 //Y varias cosas más
-public class  Partida implements LoginPartida  {
-    
+public class Partida implements LoginPartida {
+
     public boolean finJuago;
     public boolean enCurso;
     public ArrayList<Jugador> jugadores;
@@ -40,65 +37,65 @@ public class  Partida implements LoginPartida  {
     public void setAdm(Administrador adm) {
         this.adm = adm; // necesita un administrador para comunicarse con todo el juego
     }
-    
+
     // Para saber si todos los jugadores que hicieron login estan listos para jugar.
-    public boolean revListos(){
+    public boolean revListos() {
         int num = jugadores.size();
         boolean res = false;
         System.out.println(num);
         if (num > 0) {
             res = true;
-            for(int i = 0; i < num ; i++){
-                if(jugadores.get(i).isEnJuego()){
-                    res = jugadores.get(i).isListo() && res; 
+            for (int i = 0; i < num; i++) {
+                if (jugadores.get(i).isEnJuego()) {
+                    res = jugadores.get(i).isListo() && res;
                 }
             }
-            if(res){ //Quita del arreglo de jugadores a los jugadores que se salieron.
-                for(int i = 0; i < num ; i++){
-                    if(!jugadores.get(i).isEnJuego()){
+            if (res) { // Quita del arreglo de jugadores a los jugadores que se salieron.
+                for (int i = 0; i < num; i++) {
+                    if (!jugadores.get(i).isEnJuego()) {
                         jugadores.remove(i);
-                        i = i-1;
-                        num = num-1; 
+                        i = i - 1;
+                        num = num - 1;
                     }
-                }    
-            }   
+                }
+            }
         }
-        //juego
+        // juego
         return res;
-        //Estresamiento
-        //return true;
-        //-------------
+        // Estresamiento
+        // return true;
+        // -------------
     }
-    
 
-    //Regresa una conexion al usuario que quiere hacer login y checa el status del jugador.
+    // Regresa una conexion al usuario que quiere hacer login y checa el status del
+    // jugador.
     @Override
-    public Conex Conect(String IDPlayer) throws RemoteException {
+    public Conex conexion(String IDPlayer) throws RemoteException {
         Conex con;
         int num = jugadores.size();
         boolean existe = false;
         int i = 0;
         Jugador aux = new Jugador(IDPlayer);
-        while(i < num && !existe){
+        while (i < num && !existe) {
             existe = jugadores.get(i).equals(aux);
             i++;
         }
-        if(existe && !jugadores.get(i-1).isEnJuego()){
-            jugadores.get(i-1).setEnJuego(true);
-            jugadores.get(i-1).setListo(false);
-            jugadores.get(i-1).setAcabo(false);
-            con = new Conex(IDPlayer,jugadores.get(i-1).getPuntos(), 7899, "localhost", 6791, "228.5.6.7");  
-        }else if(existe){
+        if (existe && !jugadores.get(i - 1).isEnJuego()) {
+            jugadores.get(i - 1).setEnJuego(true);
+            jugadores.get(i - 1).setListo(false);
+            jugadores.get(i - 1).setAcabo(false);
+            con = new Conex(IDPlayer, jugadores.get(i - 1).getPuntos(), 7899, "localhost", 6791, "228.5.6.7");
+        } else if (existe) {
             con = new Conex(null);
-        }else{
+        } else {
             jugadores.add(new Jugador(IDPlayer, 0));
             System.out.println("Agrego nuevo");
             con = new Conex(IDPlayer, 7899, "localhost", 6791, "228.5.6.7");
         }
         return con;
     }
-    
-    //Resetea puntos a cero
+
+    // Resetea puntos a cero
     public void limpiaRonda() {
         try {
             this.puntaje();
@@ -110,7 +107,8 @@ public class  Partida implements LoginPartida  {
             Logger.getLogger(Partida.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    //El jugador lo manda para decir que está listo
+
+    // El jugador lo manda para decir que está listo
     @Override
     public void listo(String IDPlayer) throws RemoteException {
         int index;
@@ -118,7 +116,8 @@ public class  Partida implements LoginPartida  {
         index = jugadores.indexOf(aux);
         jugadores.get(index).setListo(true);
     }
-    //El jugador lo manda para avisar que esta saliendo de la partida
+
+    // El jugador lo manda para avisar que esta saliendo de la partida
     @Override
     public void logout(String IDPlayer) throws RemoteException {
         int index;
@@ -126,30 +125,32 @@ public class  Partida implements LoginPartida  {
         index = jugadores.indexOf(aux);
         jugadores.get(index).setEnJuego(false);
     }
-    //Le manda un string con los puntajes de todos los jugadores
+
+    // Le manda un string con los puntajes de todos los jugadores
     @Override
     public String puntaje() throws RemoteException {
-        if(!finJuago){
+        if (!finJuago) {
             ultima = jugadores.toString();
         }
         return ultima;
-        
+
     }
-    //metodo que pone a todos los jugadores 
-    //listos para iniciar partida
+
+    // metodo que pone a todos los jugadores
+    // listos para iniciar partida
     public void inicioPartida() {
         limpiaRonda();
         enCurso = true;
         int num = jugadores.size();
-        for(int i = 0; i < num ; i++){
+        for (int i = 0; i < num; i++) {
             jugadores.get(i).setAcabo(false);
             jugadores.get(i).setListo(false);
-            if(!jugadores.get(i).isEnJuego()){
+            if (!jugadores.get(i).isEnJuego()) {
                 jugadores.remove(i);
-                i = i-1;
-                num = num-1;
+                i = i - 1;
+                num = num - 1;
             }
-        }    
+        }
     }
 
     @Override
@@ -167,12 +168,12 @@ public class  Partida implements LoginPartida  {
             jugadore.setListo(false);
         }
     }
-    
-    public int getIndex(String nom){
+
+    public int getIndex(String nom) {
         return jugadores.indexOf(new Jugador(nom));
     }
-    
-    public int getPuntos(int index){
+
+    public int getPuntos(int index) {
         return jugadores.get(index).incPuntos();
     }
 }

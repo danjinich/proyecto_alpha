@@ -7,6 +7,10 @@ package Cliente;
 
 
 
+import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle;
+import javax.swing.event.*;
 import Interfaces.Conex;
 import Interfaces.LoginPartida;
 import java.rmi.NotBoundException;
@@ -32,64 +36,67 @@ public class Login extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // Generated using JFormDesigner Evaluation license - unknown
     private void initComponents() {
+        btnLogin = new JButton();
+        txtID = new JTextField();
+        jLabel1 = new JLabel();
+        av = new JLabel();
 
-        btnLogin = new javax.swing.JButton();
-        txtID = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        av = new javax.swing.JLabel();
+        //======== this ========
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        var contentPane = getContentPane();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        btnLogin.setText("Login");
-        btnLogin.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                btnLoginAncestorAdded(evt);
+        //---- btnLogin ----
+        btnLogin.setText("Iniciar sesi\u00f3n");
+        btnLogin.addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorAdded(AncestorEvent e) {
+                btnLoginAncestorAdded(e);
             }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
+            @Override
+            public void ancestorMoved(AncestorEvent e) {}
+            @Override
+            public void ancestorRemoved(AncestorEvent e) {}
         });
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
+        btnLogin.addActionListener(e -> btnLoginActionPerformed(e));
 
-        jLabel1.setText("ID Jugador");
+        //---- jLabel1 ----
+        jLabel1.setText("Ingresa el ID que deseas tener: ");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+        GroupLayout contentPaneLayout = new GroupLayout(contentPane);
+        contentPane.setLayout(contentPaneLayout);
+        contentPaneLayout.setHorizontalGroup(
+            contentPaneLayout.createParallelGroup()
+                .addGroup(contentPaneLayout.createSequentialGroup()
+                    .addGap(42, 42, 42)
+                    .addGroup(contentPaneLayout.createParallelGroup()
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addComponent(btnLogin)
+                            .addContainerGap(248, Short.MAX_VALUE))
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addGroup(contentPaneLayout.createParallelGroup()
+                                .addComponent(jLabel1)
+                                .addComponent(txtID))
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(av, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap(64, Short.MAX_VALUE))))
+        );
+        contentPaneLayout.setVerticalGroup(
+            contentPaneLayout.createParallelGroup()
+                .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                    .addGap(81, 81, 81)
+                    .addComponent(jLabel1)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(txtID, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+                    .addGap(40, 40, 40)
                     .addComponent(btnLogin)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtID, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                            .addComponent(av, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(68, Short.MAX_VALUE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                    .addComponent(av)
+                    .addGap(56, 56, 56))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(84, 84, 84)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addComponent(btnLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addComponent(av)
-                .addGap(56, 56, 56))
-        );
-
         pack();
+        setLocationRelativeTo(getOwner());
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_btnLoginAncestorAdded
@@ -104,7 +111,7 @@ public class Login extends javax.swing.JFrame {
             try { 
                 
                 //Levanta RMI, cambia la ruta de abajo
-                System.setProperty("java.security.policy", "file:/home/danjf/IdeaProjects/ProyectoAlpha/src/Cliente/client.policy");
+                System.setProperty("java.security.policy", "file:/Users/pablo/Documents/Escuela/ITAM/Catorceavo semestre/Sistemas distribuidos/proyecto_alpha/src/Cliente/client.policy");
                 if (System.getSecurityManager() == null) {
                     System.setSecurityManager(new SecurityManager());
                 }
@@ -114,7 +121,7 @@ public class Login extends javax.swing.JFrame {
                 // Lookup del RMI
                 LoginPartida Log = (LoginPartida) registry.lookup(name);
                 
-                con = Log.Conect(usr); // En con ahora están los detalles de conexión
+                con = Log.conexion(usr); // En con ahora están los detalles de conexión
                 //en localhost va la ip del servidor
                 //Revisa lo que regresa del usuario
                 if(con.getIdJugador() == null){
@@ -175,9 +182,10 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel av;
-    private javax.swing.JButton btnLogin;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField txtID;
+    // Generated using JFormDesigner Evaluation license - unknown
+    private JButton btnLogin;
+    private JTextField txtID;
+    private JLabel jLabel1;
+    private JLabel av;
     // End of variables declaration//GEN-END:variables
 }

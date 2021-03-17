@@ -1,0 +1,127 @@
+JFDML JFormDesigner: "7.0.3.0.337" Java: "11.0.10" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:32:p, par t:::p {comp b31::l::64:x, comp b21::l::64:x, comp b11::l::64:x}, space :::p, par l:::p {comp b32::::64:x, comp b22::::64:x, comp b12::::64:x}, space :::p, par t:::p {comp b23::l::64:x, comp b13::::64:x, comp b33::::64:x}, space :::p, par l {comp b34::l::64:x, comp b24::::64:x, comp b14::::64:x}, space ::18:x, par l {seq {space :p:9:p, comp avi:::p::p, space :0:0:x}, seq t {space :0:0:x, par l {comp jLabel1:::p::p, par l {par l:t::p {seq t {comp btnInicio:::p::p, space :::x, comp btnSal:::p::p}, comp jTextField1::t:p:258:p}, comp txtPuntos::t:p:258:p}}}}, space :::p}}"
+			"$verticalGroup": "par l {seq t {space :::x, par l {seq l {par t:::p {comp b12::t:::p, comp b13::t:::p, comp b11::t:::p, comp b14::t:::p}, space :::p, par l:::p {comp b21:::::p, comp b22:::::p, comp b23::l:::p, comp b24::l:::p}, space :::p, par l:::p {comp b31:::p::p, comp b32:::p::p, comp b33::l:p::p, comp b34::t:p::p}}, seq t {comp jTextField1:::p:40:p, space s:::p, par b {comp btnSal::b:p::p, comp btnInicio::b:p::p}, space s:::p, comp jLabel1:::p::p, space :::p, comp txtPuntos:::p:82:p}}, space :p:180:p, comp avi:::p::p}}"
+		} ) {
+			name: "this"
+			"defaultCloseOperation": 3
+			"minimumSize": new java.awt.Dimension( 590, 270 )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b11"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b11ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b12"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b12ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b14"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b14ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b13"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b13ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b21"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b21ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b22"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b22ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b24"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b24ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b23"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b23ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b34"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b34ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b31"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b31ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b32"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b32ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "b33"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Cliente/hole.png" )
+				"minimumSize": new java.awt.Dimension( 64, 64 )
+				"maximumSize": new java.awt.Dimension( 64, 64 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "b33ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "jTextField1"
+				"font": new java.awt.Font( "Tahoma", 0, 18 )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "jLabel1"
+				"text": "Puntuaciones: "
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "txtPuntos"
+				"font": new java.awt.Font( "Tahoma", 0, 18 )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnInicio"
+				"text": "Iniciar juego"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "btnInicioActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnSal"
+				"text": "Cerrar sesión"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "btnSalActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "avi"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 590, 260 )
+			"location": new java.awt.Point( 0, 5 )
+		} )
+	}
+}
