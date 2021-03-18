@@ -5,8 +5,6 @@
  */
 package Cliente;
 
-
-
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle;
@@ -99,61 +97,61 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(getOwner());
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLoginAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_btnLoginAncestorAdded
+    private void btnLoginAncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_btnLoginAncestorAdded
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnLoginAncestorAdded
+    }// GEN-LAST:event_btnLoginAncestorAdded
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         String usr = txtID.getText();
         Conex con;
-        if(!usr.equals("")){
-            try { 
-                
-                //Levanta RMI, cambia la ruta de abajo
-                System.setProperty("java.security.policy", "file:/Users/pablo/Documents/Escuela/ITAM/Catorceavo semestre/Sistemas distribuidos/proyecto_alpha/src/Cliente/client.policy");
+        if (!usr.equals("")) {
+            try {
+                // Conexión al RMI
+                System.setProperty("java.security.policy",
+                        "file:/Users/pablo/Documents/Escuela/ITAM/Catorceavo semestre/Sistemas distribuidos/proyecto_alpha/src/Cliente/client.policy");
                 if (System.getSecurityManager() == null) {
                     System.setSecurityManager(new SecurityManager());
                 }
-                String name = "Login";
-                // Registra al RMI
-                Registry registry = LocateRegistry.getRegistry("localhost");  //Aqui va la IP del servidor
-                // Lookup del RMI
-                LoginPartida Log = (LoginPartida) registry.lookup(name);
-                
-                con = Log.conexion(usr); // En con ahora están los detalles de conexión
-                //en localhost va la ip del servidor
-                //Revisa lo que regresa del usuario
-                if(con.getIdJugador() == null){
-                    av.setText("Usuario ya juega");
-                }else if(con.getPuntos() == -1){
-                    //Alta nuevo jugador
-                    Juego gui = new Juego(usr, 0, con.getTcpPort(), con.getTcpIP(), con.getMulPort(), con.getMulIP(), Log);
+                String name = "Inicio";
+                Registry registry = LocateRegistry.getRegistry("localhost"); // Aqui va la IP del servidor
+                LoginPartida partida = (LoginPartida) registry.lookup(name);
+                con = partida.conexion(usr);
+
+                if (con.getJugadorId() == null) {
+                    av.setText("Alguien más está jugando con este ID. :(");
+                } else if (con.getPuntos() == -1) {
+                    // Si no hay un juego corriendo, se crea el nuevo jugador.
+                    Juego gui = new Juego(usr, 0, con.getPuertoTCP(), con.getIpTCP(), con.getPuertoMulticast(), con.getIpMulticast(),
+                            partida);
                     gui.setVisible(true);
-                }else{
-                    //Jugador vuelve a entrar
-                    Juego gui = new Juego(usr, con.getPuntos(), con.getTcpPort(), con.getTcpIP(), con.getMulPort(), con.getMulIP(), Log);
+                } else {
+                    // Si el jugador con su ID ya existía, regresas a jugar con ése
+                    Juego gui = new Juego(usr, con.getPuntos(), con.getPuertoTCP(), con.getIpTCP(), con.getPuertoMulticast(),
+                            con.getIpMulticast(), partida);
                     gui.setVisible(true);
-                    
                 }
-                
+
             } catch (RemoteException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotBoundException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-    }//GEN-LAST:event_btnLoginActionPerformed
+
+    }// GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel. For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -171,7 +169,7 @@ public class Login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+        // </editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

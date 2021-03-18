@@ -12,13 +12,12 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//Conexion TCP, cada conex es un hilo y el escuchador de conexc est[a en
-//un hilo indepenmdiante.
+// Esta clase crea un hilo por cada conexión del usuario para signarle un socket de TCP
 
 public class TCP extends Thread {
 
-    Administrador adm;
-    Partida pa;
+    Administrador admin;
+    Partida partida;
     ServerSocket listenSocket;
 
     public TCP(int serverPort) {
@@ -30,12 +29,12 @@ public class TCP extends Thread {
         }
     }
 
-    public void setAdm(Administrador adm) {
-        this.adm = adm;
+    public void setAdmin(Administrador admin) {
+        this.admin = admin;
     }
 
-    public void setP(Partida pa) {
-        this.pa = pa;
+    public void setPartida(Partida partida) {
+        this.partida = partida;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class TCP extends Thread {
         try {
             while (true) {
                 Socket clientSocket = listenSocket.accept();
-                Puntos p = new Puntos(adm, clientSocket, pa);
+                Puntos p = new Puntos(admin, clientSocket, partida);
                 p.start();
             }
         } catch (EOFException e) {

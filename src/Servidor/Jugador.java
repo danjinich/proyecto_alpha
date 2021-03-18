@@ -5,7 +5,7 @@
  */
 package Servidor;
 
-//Objeto jugaddor de java.
+// POJO Jugador
 
 public class Jugador {
     public String id;
@@ -28,9 +28,13 @@ public class Jugador {
 
     @Override
     public String toString() {
-        return id + ": " + puntos + "\n";
+        String res = "El jugador " + id + " tiene " + puntos + " puntos. \n";
+
+        if (puntos == 1) {
+            res = "El jugador " + id + " tiene " + puntos + " punto. \n";
+        }
+        return res;
     }
-    // GGetters setterrss
 
     public boolean isAcabo() {
         return acabo;

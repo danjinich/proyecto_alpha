@@ -13,7 +13,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//Adminiistrador del servidor
+// Esta clase es la del administrador del servidor.
+// Todo objeto de tipo Administrador funcionará como un "coordinador"
+// de las acciones ejecutadas del lado del servidor
 
 public class Administrador {
     Multicast m;
@@ -21,33 +23,32 @@ public class Administrador {
     public Administrador() {
 
     }
-
-    public void setM(Multicast m) {
+    // Este setter conecta la instancia del Multicast
+    public void setMulticast(Multicast m) {
         this.m = m;
-
     }
 
-    public synchronized void ganador(String nom) {
+    // Este setter establece al ganador.
+    // Dado que el juego debe parar cuando hay un ganador, el método es synchronized
+    public synchronized void setGanador(String nom) {
         System.out.println(nom);
-        m.ganador(nom);
+        m.setGanador(nom);
     }
 
     public static void main(String[] args) throws InterruptedException {
         try {
-
-            Administrador a = new Administrador(); // levanta adm
+            Administrador a = new Administrador();
             Multicast m = new Multicast();
-            m.setAdm(a);
-            a.setM(m);
+            m.setAdmin(a);
+            a.setMulticast(m);
             m.iniciaMulticast();
-            TCP tcp = new TCP(7899); // Levanta TCP
-            Partida engine = new Partida(); // Levanta Partida
-            tcp.setP(engine); // sets
-            engine.setAdm(a);
-            tcp.setAdm(a); // ..
-            tcp.start(); // inicia hilo de mensajes TCP
+            TCP tcp = new TCP(7899);
+            Partida engine = new Partida();
+            tcp.setPartida(engine);
+            engine.setAdmin(a);
+            tcp.setAdmin(a);
+            tcp.start();
 
-            // Levanta rmi, aguas con la liga
             System.setProperty("java.security.policy",
                     "file:/Users/pablo/Documents/Escuela/ITAM/Catorceavo semestre/Sistemas distribuidos/proyecto_alpha/src/Cliente/client.policy");
             if (System.getSecurityManager() == null) {
@@ -56,48 +57,47 @@ public class Administrador {
 
             LocateRegistry.createRegistry(1099);
 
-            String name = "Login";
+            String name = "Inicio";
             LoginPartida stub = (LoginPartida) UnicastRemoteObject.exportObject(engine, 0);
 
             Registry registry = LocateRegistry.getRegistry();
-            System.out.println(stub.toString());
             registry.rebind(name, stub);
-            System.out.println(stub.toString());
-            // while del administrador. Lo que mantiene al administrador vivo.
+
+            // Comienza la ejecución del servidor
+            System.out.println("El servidor está activado :)");
             while (true) {
-                System.out.print(".");
-                if (!engine.revListos()) {
-                    Thread.sleep(200);
+                if (!engine.isJugadoresListos()) {
+                    Thread.sleep(100);
                 } else {
-                    if (!engine.enCurso && engine.finJuago) {
+                    // Aquí se revisa si:
+                    // 1. No ay un juego en curso. De ser así, se empieza uno (si todos los jugadores están listos)
+                    // 2. Si hay un juego en curso, se "avanza" la partida (este caso es importante de considerar cuando entra un jugador nuevo).
+                    // 3. Si el juego tiene que ser reiniciado
+                    if (!engine.isEnCurso() && engine.isFin()) {
                         engine.inicioPartida();
-                        m.start(); // inicia el hilo de multicast
-                        engine.finJuago = false;
-                    } else if (engine.enCurso && !engine.finJuago) { // sucede cuando entra un nuevo jugador
+                        m.start();
+                        engine.setFin(false);
+                    } else if (engine.isEnCurso() && !engine.isFin()) {
                         engine.siguePartida();
                     } else {
-                        // Reinicia juego
-                        // Tengo que asegurarme de que todos esten listos
-                        // antes de iniciar
-                        if (engine.revListos()) {
-                            engine.enCurso = false;
+                        // Reinicia el juego si todos los jugadores están listos.
+                        if (engine.isJugadoresListos()) {
+                            engine.setEnCurso(false);
                             engine.inicioPartida();
                             m = new Multicast();
-                            m.setAdm(a);
-                            a.setM(m);
+                            m.setAdmin(a);
+                            a.setMulticast(m);
                             m.iniciaMulticast();
                             m.start();
-                            engine.finJuago = false;
+                            engine.setFin(false);
                         } else {
                             Thread.sleep(100);
                         }
                     }
                 }
             }
-
         } catch (RemoteException ex) {
             Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("algo");
         }
 
     }

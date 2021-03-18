@@ -120,7 +120,7 @@ public class ClienteEstresado extends Thread {
 
                 ClienteEstresado c;
                 Conex con;
-                System.setProperty("java.security.policy", "file:/home/danjf/IdeaProjects/ProyectoAlpha/src/Cliente/client.policy");
+                System.setProperty("java.security.policy", "file:/Users/pablo/Documents/Escuela/ITAM/Catorceavo semestre/Sistemas distribuidos/proyecto_alpha/src/Cliente/client.policy");
                 if (System.getSecurityManager() == null) {
                     System.setSecurityManager(new SecurityManager());
                 }

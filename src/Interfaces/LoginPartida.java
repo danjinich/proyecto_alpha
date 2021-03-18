@@ -8,14 +8,16 @@ package Interfaces;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+// Ésta es la interfaz remota que implementará el servidor
+// para enviar los servicios necesarios al jugador.
 public interface LoginPartida extends Remote {
     Conex conexion(String IDPlayer) throws RemoteException;
 
-    void listo(String IDPlayer) throws RemoteException;
+    void isListo(String IDPlayer) throws RemoteException;
 
     void logout(String IDPlayer) throws RemoteException;
 
-    String puntaje() throws RemoteException;
+    String getPuntaje() throws RemoteException;
 
-    int misPuntos(String IDPlayer) throws RemoteException;
+    int getMisPuntos(String IDPlayer) throws RemoteException;
 }

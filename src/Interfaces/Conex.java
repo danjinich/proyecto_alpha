@@ -7,61 +7,62 @@ package Interfaces;
 
 import java.io.Serializable;
 
-//Clase usada para regresar los datos de conexion al jugador.
-// El jugador recibe un objeto de clase conexion por el RMI
+// Esta clase existe como un "mensajero",
+// la cual envía los datos de la conexión del servidor para que el jugador pueda conectarse y jugar
+// Dicho esto, el RMI envía un objeto serializado de clase Conex para que pueda conectarse.
 public class Conex implements Serializable {
-    String idJugador;
+    String jugadorId;
     int puntos;
-    int tcpPort;// = 7899;
-    String tcpIP;// = "localhost";
-    int mulPort;// = 6791;
-    String mulIP;// = "228.5.6.7";
+    int puertoTCP;
+    String ipTCP;
+    int puertoMulticast;
+    String ipMulticast;
 
-    public Conex(String idJugador, int puntos, int tcpPort, String tcpIP, int mulPort, String mulIP) {
-        this.idJugador = idJugador;
+    public Conex(String jugadorId, int puntos, int puertoTCP, String ipTCP, int puertoMulticast, String ipMulticast) {
+        this.jugadorId = jugadorId;
         this.puntos = puntos;
-        this.tcpPort = tcpPort;
-        this.tcpIP = tcpIP;
-        this.mulPort = mulPort;
-        this.mulIP = mulIP;
-
+        this.puertoTCP = puertoTCP;
+        this.ipTCP = ipTCP;
+        this.puertoMulticast = puertoMulticast;
+        this.ipMulticast = ipMulticast;
     }
 
-    public Conex(String idJugador) {
-        this.idJugador = idJugador;
+    public Conex(String jugadorId) {
+        this.jugadorId = jugadorId;
     }
 
-    public Conex(String idJugador, int tcpPort, String tcpIP, int mulPort, String mulIP) {
-        this.idJugador = idJugador;
+    // Todo jugador nuevo en el servidor empieza con puntos = -1
+    public Conex(String jugadorId, int puertoTCP, String ipTCP, int puertoMulticast, String ipMulticast) {
+        this.jugadorId = jugadorId;
         this.puntos = -1;
-        this.tcpPort = tcpPort;
-        this.tcpIP = tcpIP;
-        this.mulPort = mulPort;
-        this.mulIP = mulIP;
+        this.puertoTCP = puertoTCP;
+        this.ipTCP = ipTCP;
+        this.puertoMulticast = puertoMulticast;
+        this.ipMulticast = ipMulticast;
     }
 
-    public String getIdJugador() {
-        return idJugador;
+    public String getJugadorId() {
+        return jugadorId;
     }
 
     public int getPuntos() {
         return puntos;
     }
 
-    public int getTcpPort() {
-        return tcpPort;
+    public int getPuertoTCP() {
+        return puertoTCP;
     }
 
-    public String getTcpIP() {
-        return tcpIP;
+    public String getIpTCP() {
+        return ipTCP;
     }
 
-    public int getMulPort() {
-        return mulPort;
+    public int getPuertoMulticast() {
+        return puertoMulticast;
     }
 
-    public String getMulIP() {
-        return mulIP;
+    public String getIpMulticast() {
+        return ipMulticast;
     }
 
 }
