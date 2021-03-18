@@ -17,23 +17,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JuegoCli extends Thread {
-    String idJuego;// = "BURU";
+    String juegoId;
     public Juego gui;
-    int tcpPort;// = 7899;
-    String tcpIP;// = "localhost";
-    int mulPort;// = 6791;
-    String mulIP;// = "228.5.6.7";
-    LoginPartida Log; // Cooonexioon a RMI
+    int puertoTCP;
+    String ipTCP;
+    int puertoMulticast;
+    String ipMulticast;
+    LoginPartida partida;
     int puntos;
 
-    public JuegoCli(String idJuego, int puntos, int tcpPort, String tcpIP, int mulPort, String mulIP,
-            LoginPartida Log) {
-        this.idJuego = idJuego;
-        this.tcpPort = tcpPort;
-        this.tcpIP = tcpIP;
-        this.mulPort = mulPort;
-        this.mulIP = mulIP;
-        this.Log = Log;
+    public JuegoCli(String juegoId, int puntos, int puertoTCP, String ipTCP, int puertoMulticast, String ipMulticast,
+                    LoginPartida partida) {
+        this.juegoId = juegoId;
+        this.puertoTCP = puertoTCP;
+        this.ipTCP = ipTCP;
+        this.puertoMulticast = puertoMulticast;
+        this.ipMulticast = ipMulticast;
+        this.partida = partida;
         this.puntos = puntos;
     }
 
@@ -42,8 +42,8 @@ public class JuegoCli extends Thread {
         try {
             // Conectar a multicast
             MulticastSocket s = null;
-            InetAddress group = InetAddress.getByName(mulIP);
-            s = new MulticastSocket(mulPort);
+            InetAddress group = InetAddress.getByName(ipMulticast);
+            s = new MulticastSocket(puertoMulticast);
             s.joinGroup(group);
             // variables de run
             byte[] buffer;
@@ -51,26 +51,38 @@ public class JuegoCli extends Thread {
             int id;
             String aux;
             String puntajes;
-            // while de Multicast para recibir monstruos
+            // Conexión Multicast
             while (true) {
                 buffer = new byte[1000];
                 monstruo = new DatagramPacket(buffer, buffer.length);
-                puntajes = Log.puntaje(); // regresa el puntaje de todos los que están jugando
-                gui.setPuntos(puntajes); // imprime en la interfaz los puntajes de todos
-                gui.setAviso("¡El juego sigue corriendo! ¡Mucha suerte!");
-                s.receive(monstruo); // Un número del 0 al 11. o 100 si alguien ganó.
+                // Puntaje de todos los jugadores en esta iteración
+                puntajes = partida.getPuntaje();
+                // Imprime el puntaje en la interfaz gráfica
+                gui.setPuntos(puntajes);
+                // Imprime el aviso en la interfaz gráfica
+                gui.setAviso("¡Bienvenide al juego! ¡Mucha suerte!");
+                // El socket recibe un id del botón para enviar en qué posición se encuentra el monstruo
+                // Si el socket recibe la bandera de ID = 100, el juego acabó.
+                s.receive(monstruo);
                 id = parseInt(new String(monstruo.getData(), 0, monstruo.getLength()));
-                // ID cuando alguien gana es 100
+                // Si alguien gana, el ID del botón es igual a 100
                 if (id == 100) {
-                    s.receive(monstruo); // aqui va a estar el nombre del que ganó
+                    // El multicast recibe el ID del jugador que ganó
+                    s.receive(monstruo);
+                    System.out.println(monstruo.getData().toString());
                     aux = (new String(monstruo.getData(), 0, monstruo.getLength()));
-                    gui.setGanador(aux); // escribe quien ganó
-                    gui.setNuevoJuego(); // pone un cuadrito en verde
+                    // Imprime al ganador en la interfaz gráfica
+                    gui.setGanador(aux);
+                    // Se vacía todo con el agujero negro :)
+                    gui.setNuevoJuego();
+                    // Se habilita el botón de inicio para que les jugadores puedan volver a jugar
                     gui.habilitaInicio();
-                    puntajes = Log.puntaje(); // actualiza puntajes
+                    // Se reinician los puntajes
+                    puntajes = partida.getPuntaje();
                     gui.setPuntos(puntajes);
                     break;
                 } else {
+                    // Si nadie ha ganado, se cambia la posición del monstruo dentro de los botones
                     gui.setIconos();
                     gui.setMonstruo(id);
                 }
@@ -81,16 +93,15 @@ public class JuegoCli extends Thread {
 
     }
 
-    // cuando le pegas a un monstruo este metodo manda un aviso al servidor
-    // usando sockets.
+    // El método golpe avisa al servidor cuando un jugador dio un golpe exitoso a un monstruo
     public void golpe() {
         Socket s = null;
         try {
-            // Aqui inicia conex con serv para avisar que tiene un punto
+            // Se envía la info de los puntajes al servidor.
             puntos = puntos + 1;
-            s = new Socket(tcpIP, tcpPort);
+            s = new Socket(ipTCP, puertoTCP);
             DataOutputStream out = new DataOutputStream(s.getOutputStream());
-            out.writeUTF(idJuego);
+            out.writeUTF(juegoId);
         } catch (IOException ex) {
             Logger.getLogger(JuegoCli.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

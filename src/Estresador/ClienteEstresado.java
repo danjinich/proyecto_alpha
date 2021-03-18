@@ -121,8 +121,6 @@ public class ClienteEstresado extends Thread{
                 for(int k=1; k<=10; k++) {//Para cada numero de jugadores se hacen 10 pruebas
                     ClienteEstresado c;
                     Conex con;
-
-
                     String name = "Login";
                     Registry registry = LocateRegistry.getRegistry("localhost");  //Aqui va la IP del servidor
                     LoginPartida Log = (LoginPartida) registry.lookup(name);

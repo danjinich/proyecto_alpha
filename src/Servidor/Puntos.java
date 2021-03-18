@@ -6,30 +6,24 @@
 package Servidor;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+// Esta clase maneja el conteo de puntos de cada jugador del lado del servidor.
 public class Puntos extends Thread {
-
-    Administrador adm;
-    Partida pa;
+    Administrador admin;
+    Partida partida;
     Socket clientSocket;
     DataInputStream in;
     // Estresamiento
     // DataOutputStream out;
     // ------------------
 
-    // Manejador de los puntoss de los juggadores, actualkiza los puntos de cada
-    // uno cuando recive un mensaje por TCP ded cada uno.
-
-    public Puntos(Administrador adm, Socket clientSocket, Partida pa) {
-
+    public Puntos(Administrador admin, Socket clientSocket, Partida partida) {
         try {
-            this.adm = adm;
-            this.pa = pa;
+            this.admin = admin;
+            this.partida = partida;
             this.clientSocket = clientSocket;
             in = new DataInputStream(clientSocket.getInputStream());
             // Estresamiento
@@ -40,34 +34,37 @@ public class Puntos extends Thread {
         }
     }
 
-    // Actualiza puntos, si alguno ya tiene 5 entonces hay un ganador
-    // y manda a ese ganaddor por Multicast (Da la orden)
-    public synchronized void actpuntos(String nom) {
+    // Esta función actualiza los puntos de cada jugador.
+    // Si algún jugador llegó a la cantidad de puntosGanar (= 5), le avisa al Administrador
+    // que hay un ganador y limpia el juego.
+    public synchronized void actualizaPuntos(String nom) {
         int puntos;
-        int index;
-        index = pa.getIndex(nom); // el número de casilla del arreglo en el que está ese jugador
-        puntos = pa.getPuntos(index); // actualiza los puntos del jugador y te regresa los nuevos puntos.
-        if (puntos == 5) {
+        int jugadorIndex;
+        int puntosGanar = 5;
+
+        // Busca el índice en el que está el jugador al que se le actualizarán los puntos
+        jugadorIndex = partida.getIndex(nom);
+        // Recibe los puntos actualizados del jugador en el índice jugadorIndex
+        puntos = partida.getPuntos(jugadorIndex);
+
+        if (puntos == puntosGanar) {
             System.out.println(nom);
-            adm.ganador(nom);
-            pa.limpiaRonda(); // Deja todo listo para el siguiente juego. Se espera a que todos los jugadores
-            // le pongan listo para que empiece la nueva partida.
+            admin.setGanador(nom);
+            partida.limpiaJuego();
         }
     }
 
     @Override
     public void run() {
         try {
-            // inii temp
             String id;
             id = in.readUTF();
             System.out.println(id);
-            actpuntos(id);
+            actualizaPuntos(id);
             // Estresamiento
             // out.writeUTF("a");
             // -----------------------
             clientSocket.close();
-            // fin tpo
         } catch (IOException ex) {
             Logger.getLogger(Puntos.class.getName()).log(Level.SEVERE, null, ex);
         }

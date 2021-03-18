@@ -9,41 +9,41 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.UnknownHostException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Multicast extends Thread {
 
-    String mulIP = "228.5.6.7";
-    int mulPu = 6791;
-    MulticastSocket s = null; // -----------------------------------------------------------------
+    String ipMulticast = "228.5.6.7";
+    int puertoMulticast = 6791;
+    MulticastSocket s = null;
     InetAddress group;
-    boolean envTopos = true; // cuando todos los jugadores ponen start se empiezan a mandar topos
+    // Esta variable determina si hay monstruos activos en el juego o no
+    boolean activoMonstruos = true;
     String ganador;
-    Administrador adm;
+    Administrador admin;
 
-    public void setAdm(Administrador adm) {
-        this.adm = adm;
+    public void setAdmin(Administrador admin) {
+        this.admin = admin;
     }
 
-    public void setMulIP(String mulIP) {
-        this.mulIP = mulIP;
+    public void setIpMulticast(String ipMulticast) {
+        this.ipMulticast = ipMulticast;
     }
 
-    public void setEnvTopos(boolean envTopos) {
-        this.envTopos = envTopos;
+    public void setActivoMonstruos(boolean activoMonstruos) {
+        this.activoMonstruos = activoMonstruos;
     }
 
-    public void setMulPu(int mulPu) {
-        this.mulPu = mulPu;
+    public void setPuertoMulticast(int puertoMulticast) {
+        this.puertoMulticast = puertoMulticast;
     }
 
     public void iniciaMulticast() {
         try {
-            group = InetAddress.getByName(mulIP);
-            s = new MulticastSocket(mulPu);
+            group = InetAddress.getByName(ipMulticast);
+            s = new MulticastSocket(puertoMulticast);
             s.joinGroup(group);
             s.setTimeToLive(1);
             // s.leaveGroup(group);
@@ -52,32 +52,30 @@ public class Multicast extends Thread {
         }
     }
 
-    public void ganador(String usr) {
+    public void setGanador(String usr) {
         System.out.println(usr);
         this.ganador = usr;
-        this.envTopos = false;
+        this.activoMonstruos = false;
     }
 
     @Override
     public void run() {
         int aux;
+        // Velocidad de aparición de los monstruos en milisegundos
+        int velMonstruos = 500;
         Random rand = new Random();
 
-        while (envTopos) {
+        // Mientras haya monstruos activos en el juego, se envian los mensajes Multicast
+        // La velocidad con la que se mandan estos mensajes es la velocidad con la que aparecen los monstruos
+        while (activoMonstruos) {
             try {
-                // System.out.println("123");
                 aux = rand.nextInt(11) + 1;
 
                 String myMessage = aux + "";
                 byte[] m = myMessage.getBytes();
-                // Tambien cambia el socket de abajo.
-                DatagramPacket messageOut = new DatagramPacket(m, m.length, group, mulPu);
-                // Manda mensajes
+                DatagramPacket messageOut = new DatagramPacket(m, m.length, group, puertoMulticast);
                 s.send(messageOut);
-                System.out.println("HOALGOLAGGOLLAGOLA");
-                // aux = (rand.nextInt(3) + 3)*100;
-                Thread.sleep(800);
-
+                Thread.sleep(velMonstruos);
             } catch (IOException ex) {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
@@ -85,22 +83,20 @@ public class Multicast extends Thread {
             }
 
         }
-        System.out.println("Mandando Ganador");
+        System.out.println("¡Hay un ganador!");
         try {
             String myMessage = "100";
             byte[] m = myMessage.getBytes();
-            DatagramPacket messageOut = new DatagramPacket(m, m.length, group, mulPu);
+            DatagramPacket messageOut = new DatagramPacket(m, m.length, group, puertoMulticast);
             s.send(messageOut);
-            System.out.println(ganador);
+            System.out.println("Y el ganador es...");
+            System.out.println("¡el jugador " + ganador + "!");
             m = ganador.getBytes();
-            messageOut = new DatagramPacket(m, m.length, group, mulPu);
+            messageOut = new DatagramPacket(m, m.length, group, puertoMulticast);
             s.send(messageOut);
-            System.out.println("Ganador Mandaddo");
-
         } catch (IOException ex) {
             Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
     }
 }

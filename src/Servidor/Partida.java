@@ -12,45 +12,36 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//Intento de objeto paritda de java
-//Guarda a los jugadores que se dan de alta
-//E intenta guardar el status de los jugadores
-//Para que los jugadores puedan hacer login despues de
-//hacer logout y poder jugar
-
-//Es la clase que usa RMI para mandar datos de conexion a los jugadores
-//Y varias cosas más
+// Esta el objeto de clase administra y organiza todos los datos de la partida que se está corriendo
 public class Partida implements LoginPartida {
-
-    public boolean finJuago;
-    public boolean enCurso;
+    private boolean fin;
+    private boolean enCurso;
     public ArrayList<Jugador> jugadores;
-    public String ultima;
-    Administrador adm;
+    private String ultima;
+    // La el objeto de clase Partida comunica todo lo que está sucediendo a la clase Administrador
+    Administrador admin;
 
     public Partida() {
-        finJuago = true;
+        fin = true;
         enCurso = false;
         this.jugadores = new ArrayList<>();
     }
 
-    public void setAdm(Administrador adm) {
-        this.adm = adm; // necesita un administrador para comunicarse con todo el juego
-    }
-
-    // Para saber si todos los jugadores que hicieron login estan listos para jugar.
-    public boolean revListos() {
+    // Este método revisa si todos los jugadores están listos para jugar
+    public boolean isJugadoresListos() {
         int num = jugadores.size();
         boolean res = false;
-        System.out.println(num);
+        System.out.println("Esperando jugadores...");
         if (num > 0) {
+            System.out.println("Jugadores listos: " + num);
             res = true;
             for (int i = 0; i < num; i++) {
                 if (jugadores.get(i).isEnJuego()) {
                     res = jugadores.get(i).isListo() && res;
                 }
             }
-            if (res) { // Quita del arreglo de jugadores a los jugadores que se salieron.
+            // Saca del juego a los jugadores que cerraron sesión
+            if (res) {
                 for (int i = 0; i < num; i++) {
                     if (!jugadores.get(i).isEnJuego()) {
                         jugadores.remove(i);
@@ -60,15 +51,15 @@ public class Partida implements LoginPartida {
                 }
             }
         }
-        // juego
+
         return res;
         // Estresamiento
         // return true;
         // -------------
     }
 
-    // Regresa una conexion al usuario que quiere hacer login y checa el status del
-    // jugador.
+    // Este método permite verificar si el jugador por entrar a la partida es nuevo o no.
+    // En caso de ya existir, le regresa a su conexión anterior.
     @Override
     public Conex conexion(String IDPlayer) throws RemoteException {
         Conex con;
@@ -88,18 +79,18 @@ public class Partida implements LoginPartida {
         } else if (existe) {
             con = new Conex(null);
         } else {
+            System.out.println("Agregando nuevo jugador...");
             jugadores.add(new Jugador(IDPlayer, 0));
-            System.out.println("Agrego nuevo");
             con = new Conex(IDPlayer, 7899, "localhost", 6791, "228.5.6.7");
         }
         return con;
     }
 
-    // Resetea puntos a cero
-    public void limpiaRonda() {
+    // Limpia el juego
+    public void limpiaJuego() {
         try {
-            this.puntaje();
-            finJuago = true;
+            this.getPuntaje();
+            fin = true;
             for (Jugador jugadore : jugadores) {
                 jugadore.resetPuntos();
             }
@@ -108,16 +99,16 @@ public class Partida implements LoginPartida {
         }
     }
 
-    // El jugador lo manda para decir que está listo
+    // Si el jugadore está listo para jugar, manda este método
     @Override
-    public void listo(String IDPlayer) throws RemoteException {
+    public void isListo(String IDPlayer) throws RemoteException {
         int index;
         Jugador aux = new Jugador(IDPlayer);
         index = jugadores.indexOf(aux);
         jugadores.get(index).setListo(true);
     }
 
-    // El jugador lo manda para avisar que esta saliendo de la partida
+    // Si el jugador salió del juego y cerró sesión, manda este método
     @Override
     public void logout(String IDPlayer) throws RemoteException {
         int index;
@@ -126,20 +117,19 @@ public class Partida implements LoginPartida {
         jugadores.get(index).setEnJuego(false);
     }
 
-    // Le manda un string con los puntajes de todos los jugadores
+    // Getter de los puntajes del juego
     @Override
-    public String puntaje() throws RemoteException {
-        if (!finJuago) {
+    public String getPuntaje() throws RemoteException {
+        if (!fin) {
             ultima = jugadores.toString();
         }
         return ultima;
 
     }
 
-    // metodo que pone a todos los jugadores
-    // listos para iniciar partida
+    // Este método inicia una nueva partida
     public void inicioPartida() {
-        limpiaRonda();
+        limpiaJuego();
         enCurso = true;
         int num = jugadores.size();
         for (int i = 0; i < num; i++) {
@@ -153,14 +143,16 @@ public class Partida implements LoginPartida {
         }
     }
 
+    // Este método es un getter de los puntos de un jugador dado su ID
     @Override
-    public int misPuntos(String IDPlayer) throws RemoteException {
+    public int getMisPuntos(String IDPlayer) throws RemoteException {
         int index;
         Jugador aux = new Jugador(IDPlayer);
         index = jugadores.indexOf(aux);
         return jugadores.get(index).getPuntos();
     }
 
+    // Este método agrega nuevos jugadores a la partida.
     void siguePartida() {
         enCurso = true;
         for (Jugador jugadore : jugadores) {
@@ -169,11 +161,40 @@ public class Partida implements LoginPartida {
         }
     }
 
+    // Getters y setters
+    public void setAdmin(Administrador admin) {
+        this.admin = admin;
+    }
+
     public int getIndex(String nom) {
         return jugadores.indexOf(new Jugador(nom));
     }
 
     public int getPuntos(int index) {
         return jugadores.get(index).incPuntos();
+    }
+
+    public boolean isFin() {
+        return fin;
+    }
+
+    public boolean isEnCurso() {
+        return enCurso;
+    }
+
+    public String getUltima() {
+        return ultima;
+    }
+
+    public void setFin(boolean fin) {
+        this.fin = fin;
+    }
+
+    public void setEnCurso(boolean enCurso) {
+        this.enCurso = enCurso;
+    }
+
+    public void setUltima(String ultima) {
+        this.ultima = ultima;
     }
 }

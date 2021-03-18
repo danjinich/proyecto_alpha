@@ -26,7 +26,7 @@ public final class Juego extends javax.swing.JFrame {
     private final Color colorNormal;
     private final Icon iconoMonstruo = new ImageIcon(getClass().getResource("/Cliente/Whack-a-Mole.png"));
     private final Icon iconoHoyo = new ImageIcon(getClass().getResource("/Cliente/hole.png"));
-    private final Icon iconoHoyoNegro = new ImageIcon(getClass().getResource("/Cliente/black-hole.png"));
+    private final Icon iconoAgujeroNegro = new ImageIcon(getClass().getResource("/Cliente/black-hole.png"));
     JuegoCli jugador;
     JButton[] botones = new JButton[16];
     LoginPartida partida;
@@ -150,20 +150,15 @@ public final class Juego extends javax.swing.JFrame {
         botones[id].setIcon(iconoMonstruo);
     }
 
-    // Este método deshabilita el botón de inicio [cuando hay un juego corriendo]
-    public void deshabilitaInicio() {
-        btnInicio.setEnabled(false);
-    }
-
     // Este método habilita el botón de inicio [cuando no hay un juego corriendo]
     public void habilitaInicio() {
         btnInicio.setEnabled(true);
     }
 
     // Para identificar si un juego acabó, se cambia el ícono del primer botón a un hoyo negro.
-    // Este hoyo negro "chupa" todo lo que estaba en la interfaz :)
+    // Este agujero negro "chupa" todo lo que estaba en la interfaz :)
     public void setNuevoJuego() {
-        botones[0].setIcon(iconoHoyoNegro);
+        botones[0].setIcon(iconoAgujeroNegro);
     }
 
     // CÓDIGO AUTOGENERADO PARA LA INTERFAZ GRÁFICA
@@ -449,13 +444,13 @@ public final class Juego extends javax.swing.JFrame {
             // TODO add your handling code here:
             if (primerJuego) { // si hace login
                 primerJuego = false;
-                partida.listo(jugadorId);
+                partida.isListo(jugadorId);
                 btnInicio.setEnabled(false);
                 avi.setText("Esperando a otros jugadores...");
             } else { // si no es su primer juego (se salió y volvió a entrar o inicia una nueva partida)
                 primerJuego = false;
                 setJugador(jugadorId, 0, puertoTCP, ipTCP, puertoMulticast, ipMulticast);
-                partida.listo(jugadorId);
+                partida.isListo(jugadorId);
                 btnInicio.setEnabled(false);
                 avi.setText("Esperando a otros jugadores...");
                 setIconos();
